@@ -1,0 +1,78 @@
+-- create database bhumi;
+-- use bhumi;
+CREATE TABLE orders (
+    order_id VARCHAR(45) PRIMARY KEY,
+    product_id VARCHAR(45),
+    user_id VARCHAR(45),
+    total DOUBLE,
+    date DATE,
+    status VARCHAR(50),
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE  products (
+    product_id VARCHAR(20) PRIMARY KEY,
+    product_name VARCHAR(100),
+    product_description TEXT,
+    product_returnable VARCHAR(45),
+    owner VARCHAR(100)
+);
+INSERT INTO products (product_id, product_name, product_description, product_returnable, owner)
+VALUES
+('P1', 'One Plus Nord', 'Red Mobile Phone', 'No', 'Seller_Z'),
+('P2', 'Air Jordans', 'Shoes', 'Yes', 'Nike');
+
+CREATE TABLE address (
+    pincode VARCHAR(10) PRIMARY KEY,
+    city VARCHAR(255),
+    state VARCHAR(255)
+);
+INSERT INTO address (pincode, city, state)
+VALUES
+('452001', 'Indore', 'MP'),
+('410014', 'Pune', 'Maharashtra');
+
+CREATE TABLE users (
+    user_id VARCHAR(20) PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    pincode VARCHAR(10),
+    city VARCHAR(100), 
+    state VARCHAR(100) 
+);
+
+INSERT INTO users (user_id, first_name, last_name, pincode, city, state)
+VALUES
+('U1', 'John', 'Doe', '452001', 'Indore', 'MP'),
+('U2', 'Mary', 'Ann', '410014', 'Pune', 'Maharashtra');
+
+INSERT INTO orders (order_id, product_id, user_id, total, date, status)
+VALUES
+('O1', 'P1', 'U1', 2000, '2024-03-04', 'Approved'),
+('O2', 'P2', 'U2', 7000, '2024-03-04', 'Pending'),
+('O3', 'P1', 'U1', 25000, '2024-03-04', 'Shipped');
+
+-- check status of your order
+SELECT order_id, status
+FROM orders WHERE user_id = 'U2';
+
+-- find total amount of your order
+SELECT SUM(total) AS total_amount
+FROM orders
+WHERE user_id = 'U1';
+
+-- update your city
+UPDATE users
+SET city = 'New City'
+WHERE user_id = 'U1';
+
+-- change product description
+UPDATE products
+SET product_description = 'New Description'
+WHERE product_id = 'P1';
+
+-- Display returnable products
+SELECT *
+FROM products
+WHERE product_returnable = 'Yes';
